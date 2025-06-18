@@ -1,10 +1,10 @@
 ---
-title: "Assignment 2"
-author: |
-  Mohamad Adriel Hakiem  
-  Student ID: 243UC2462B
+title: "Assignment 2: Statistical Data Analysis (CDS6224)"
+author: "Mohamad Adriel Hakiem  \nStudent ID: 243UC2462B\n"
 date: "2025-06-05"
-output: pdf_document
+output:
+  pdf_document: default
+  word_document: default
 ---
 
 ```{r setup, include=FALSE}
@@ -16,12 +16,15 @@ knitr::opts_chunk$set(echo = TRUE)
 
 # Case Study 1: Evaluating the Battery Lifespan in a New Production Line
 
-This case study explores the influence of the new production line of the company's reliable and long-lasting batteries. With the company's Production Manager Kevin, his concerns on the possibility of new batch underperforming have led us to explore a solution using hypothesis testing.   
 
+This case study explores the influence of the new production line of the company's reliable and long-lasting batteries. With the company's Production Manager Kevin, his concerns on the possibility of new batch underperforming have led us to explore a solution using hypothesis testing.
 
 ### Importing the dataset
 
 ```{r battery data, echo=TRUE}
+
+library(dplyr)
+library(tidyr)
 
 setwd("/Users/ad/Desktop/Studies/MMU/Trimester 2/Statistical Data Analysis/Assignment 2")
 batteryData <- read.csv("BatteryLifeNew.csv")
@@ -29,11 +32,12 @@ batteryData <- read.csv("BatteryLifeNew.csv")
 ```
 
 
-### Overview of the dataset 
+### Overview of the dataset
+
 
 A brief explanation on the observations below.
 
-```{r description, echo=TRUE}
+```{r battery-description, echo=TRUE}
 
 head(batteryData)
 summary(batteryData)
@@ -41,7 +45,8 @@ summary(batteryData)
 ```
 
 
-## Part A: Descriptive Statistics 
+## Part A: Descriptive Statistics
+
 
 Below is a chart illustrating the old batch of the battery performance.
 
@@ -51,7 +56,7 @@ knitr::include_graphics("old-battery-performance.png")
 
 ```
 
-To estimate the mean and standard deviation of the old batch of VoltCell Ultra batteries, we extracted the bin midpoints based on the range, as well as the frequencies from the provided histogram. Using the midpoint method, we calculated the estimated mean and standard deviation, which provide a summary of the battery lifespan and its variability in the old production line. These estimates serve as a comparison with the new batch. 
+To estimate the mean and standard deviation of the old batch of VoltCell Ultra batteries, we extracted the bin midpoints based on the range, as well as the frequencies from the provided histogram. Using the midpoint method, we calculated the estimated mean and standard deviation, which provide a summary of the battery lifespan and its variability in the old production line. These estimates serve as a comparison with the new batch.
 
 ```{r old-batch, echo=TRUE}
 
@@ -70,7 +75,7 @@ cat("The standard deviation is:", round(sdEstimated, 2), "hours\n")
 
 ```
 
-As for the new batch, we imported the raw battery lifespan data from **BatteryLifeNew.csv**. We calculated the sample mean and standard deviation to summarize the new production line's battery lifespan. 
+As for the new batch, we imported the raw battery lifespan data from **BatteryLifeNew.csv**. We calculated the sample mean and standard deviation to summarize the new production line's battery lifespan.
 
 ```{r new-batch, echo=TRUE}
 
@@ -82,7 +87,7 @@ cat("The sample standard deviation of new batch is:", round(sdNew, 2), "hours\n"
 
 ```
 
-Additionally, we computed the **95% confidence interval** for the mean using a t-test, which gives a range of values for the true mean battery lifespan of the new batch. This range gives us insight on whether the new production line is likely to meet the company's standard of 600 hours. 
+Additionally, we computed the **95% confidence interval** for the mean using a t-test, which gives a range of values for the true mean battery lifespan of the new batch. This range gives us insight on whether the new production line is likely to meet the company's standard of 600 hours.
 
 ```{r confidence-interval, echo=TRUE}
 
@@ -98,7 +103,8 @@ cat(sprintf("The 95%% confidence interval for the mean is: [%.2f, %.2f] hours\n"
 ```
 
 
-## Part B: Visualization 
+## Part B: Visualization
+
 
 In Part B, we visualize the distribution of the new battery lifespan data and assess its normality. The histogram with an overlaid normal curve provides a visual check for data's distribution, while the Q-Q plot and Shapiro Wilk-test offer quantitative evidence.
 
@@ -110,23 +116,23 @@ hist(
   probability = TRUE,
   main = "Histogram of New Battery Lifespan",
   xlab = "Battery Lifetime (hours)",
-  col = "teal",
-  border = "skyblue2"
+  col = "gainsboro",
+  border = "steelblue"
 )
 
 # overlay normal curve
 curve(
   dnorm(x, mean = meanNew, sd = sdNew),
-  col = "yellow2",
+  col = "mediumaquamarine",
   lwd = 2,
   add = TRUE
 )
 
 legend("topright", legend = c("Histogram Density", "Normal Curve"),
-       col = c("skyblue2", "yellow2"), lwd = c(2, 2), lty = c(1, 1))
+       col = c("steelblue", "mediumaquamarine"), lwd = c(2, 2), lty = c(1, 1))
 
 qqnorm(batteryData$LifetimeHrs, main = "Q-Q Plot of New Batch")
-qqline(batteryData$LifetimeHrs, col = "yellow2", lwd = 2)
+qqline(batteryData$LifetimeHrs, col = "mediumaquamarine", lwd = 2)
 
 # Shapiro-Wilk Test 
 shapiroResult <- shapiro.test(batteryData$LifetimeHrs)
@@ -140,12 +146,13 @@ if (shapiroResult$p.value > 0.05) {
 
 ```
 
-Based on the Shapiro-Wilk test outcome, the code outputs that the battery lifespans follow a normal distribution, showing that it has a large p-value as required (>0.05). 
+Based on the Shapiro-Wilk test outcome, the code outputs that the battery lifespans follow a **normal distribution**, showing that it has a large p-value as required (\>0.05).
 
 
-## Part C: Hypothesis Testing 
+## Part C: Hypothesis Testing
 
-To decide if VoltPlus should continue with the new batch, we apply hypothesis testing to decide whether they live up to their standards and their justification of their own tagline "VoltCell  Ultra – Powering Your World for 600 Hours and Beyond!".
+
+To decide if VoltPlus should continue with the new batch, we apply hypothesis testing to decide whether they live up to their standards and their justification of their own tagline "VoltCell Ultra – Powering Your World for 600 Hours and Beyond!".
 
 ```{r hypothesis-testing, echo=TRUE}
 
@@ -170,14 +177,17 @@ if (pVal < 0.05) {
 }
 ```
 
-From the hypothesis testing above, it is observed that the p-value is less than 0.5, hence we reject the null hypothesis. This shows that the new production line of the battery lifespan, is underperforming, as opposed to meeting the standards. Based on this analysis, VoltPlus Technologies should consider discontinuing the new production line. 
+From the hypothesis testing above, it is observed that the **p-value is less than 0.5**, hence we **reject the null hypothesis**. This shows that the new production line of the battery lifespan, is underperforming, as opposed to meeting the standards. Based on this analysis, VoltPlus Technologies should consider discontinuing the new production line.
+
 
 # Case Study 2: Analysis on the Sales of the New Mango Zing flavor.
 
-This second case study explores the impact of the new drink flavor, Mango Zing on sales. As the company would like to understand if Mango Zing has caused a significant change in overall sales and whether the sales of existing drinks (like Cola Classic, Lemon Light, and Berry Blast), we use statistical methods like ANOVA and correlation analysis to examine these changes. 
+
+This second case study explores the impact of the new drink flavor, Mango Zing on sales. As the company would like to understand if Mango Zing has caused a significant change in overall sales and whether the sales of existing drinks (like Cola Classic, Lemon Light, and Berry Blast), we use statistical methods like ANOVA and correlation analysis to examine these changes.
 
 
 ### Importing the dataset
+
 
 ```{r FreshFizz-data, echo=TRUE}
 
@@ -191,7 +201,8 @@ dfFreshFizz <- na.omit(dfFreshFizz)
 ```
 
 
-### Overview of the dataset 
+### Overview of the dataset
+
 
 A brief explanation on the observations below.
 
@@ -203,9 +214,10 @@ summary(dfFreshFizz)
 ```
 
 
-## Part A: Plotting and Summary Statistics 
+## Part A: Plotting and Summary Statistics
 
-To get a better understanding of the daily sales for FreshFizz, we use a line chart to show trends over time so that it can help illustrate how sales change day by day. 
+
+To get a better understanding of the daily sales for FreshFizz, we use a line chart to show trends over time so that it can help illustrate how sales change day by day.
 
 ```{r line-chart}
 
@@ -219,13 +231,11 @@ plot(dfFreshFizz$Date, dfFreshFizz$Total_Sales,
 
 ```
 
-Based on the line chart above, we observe that the trend in daily total sales in 2024 is generally upward, signaling that sales are increasing over time. The sales values shift between **$12,000 and $20,000**, suggesting variability in daily sales throughout the year. This range suggests that while there are consistent sales generally, there are also days with significantly lower and higher sales, as the chart displays volatitlity, with peaks and troughs. 
+Based on the line chart above, we observe that the trend in daily total sales in 2024 is generally upward, signaling that sales are increasing over time. The sales values shift between **\$12,000 and \$20,000**, suggesting variability in daily sales throughout the year. This range suggests that while there are consistent sales generally, there are also days with significantly lower and higher sales, as the chart displays volatitlity, with peaks and troughs.
 
-We then plot a side-by-side boxplot of daily sales to summarize the mean and the standard deviation of the daily total sales before the pre-launch **(Before June 1) and post-launch (After June 1)** of Mango Zing to determine if this new product has contributed any changes to the sales of the company. 
+We then plot a side-by-side boxplot of daily sales to summarize the mean and the standard deviation of the daily total sales before the pre-launch **(Before June 1) and post-launch (After June 1)** of Mango Zing to determine if this new product has contributed any changes to the sales of the company.
 
 ```{r comparison-period, echo=TRUE}
-
-library(dplyr)
 
 # new column to differentiate the two time periods 
 dfFreshFizz$Period <- ifelse(dfFreshFizz$Date < as.Date("2024-06-01"), "Pre-Launch (Before June 1)", "Post-Launch (After June 1)")
@@ -249,7 +259,134 @@ boxplot(Total_Sales ~ Period, data = dfFreshFizz,
 
 ```
 
-Since launching Mango Zing, FreshFizz's average daily sales increased by $14,654.25 — 
-a positive contribution, despite the increase in standard deviation of $13,095.90. Both the comparison table and boxplot indicate that the new flavor significantly boosted FreshFizz's revenue in the second half of the year. 
+Since launching Mango Zing, FreshFizz's average daily sales **increased by \$14,654.25** — a positive contribution, despite the **increase in standard deviation of \$13,095.90**. Both the comparison table and boxplot indicate that the new flavor significantly boosted FreshFizz's revenue in the second half of the year.
+
+
+## Part B: One-Way ANOVA for Sales Differences Before and After Mango Zing 
+
+
+To test for sigfinicant differences in total sales before and after the introduction of the new flavor, Mango Zing, we perform a One-Way ANOVA test below with the hypotheses stated as below:
+
+-   $H_0$ (Null Hypothesis): There is no significant difference in totals before and after the introduction of Mango Zing.
+-   $H_1$ (Alternative Hypothesis): There is a significant difference in totals before and after the introduction of Mango Zing.
+
+```{r anova-sales-diff, echo=TRUE}
+
+# one-way anova test 
+anovaResult <- aov(Total_Sales ~ Period, data = dfFreshFizz)
+anovaSummary <- summary(anovaResult)
+
+# extract p-value 
+pValue <- anovaSummary[[1]][["Pr(>F)"]][1]
+cat("The p-value from the ANOVA test is:", pValue, "\n")
+
+if (anovaSummary[[1]][["Pr(>F)"]][1] < 0.05) {
+  cat("There is a significant difference in totals before and after the introduction of Mango Zing.\n")
+} else {
+  cat("There is no significant difference in totals before and after the introduction of Mango Zing.\n")
+}
+
+```
+
+From the test above. we observe that the **p-value \< 0.05**. Hence, we **reject the null hypothesis** as there is a significant difference in totals before and after the introduction of FreshFizz's new flavor, Mango Zing.
+
+
+## Part C: ANOVA to Test Cannibalization of Other Flavors (Post-Launch)
+
+
+To compare the mean sales of the original flavors such as **Cola Classic, Lemon Light, and Berry Blast** after the launch of **Mango Zing**, we conducted another One-Way ANOVA test. This test determines whether any of the original flavors had significantly different sales during the post-launch period. 
+
+-   $H_0$ (Null Hypothesis): There is no significant difference in mean sales among the original flavors in the post-launch period.
+-   $H_1$ (Alternative Hypothesis): There is a significant difference in mean sales among the original flavors in the post-launch period.
+
+```{r anova-mean-original-flavors, echo=TRUE}
+
+# reshape to long format 
+postLaunchData <- dfFreshFizz %>%
+  filter(Date >= as.Date("2024-06-01")) %>%
+  pivot_longer(
+    cols = c(Cola_Classic, Lemon_Light, Berry_Blast),
+    names_to = "Flavor",
+    values_to = "Sales"
+  )
+
+# perform test 
+anovaFlavors <- aov(Sales ~ Flavor, data = postLaunchData)
+anovaSummaryFlavors <- summary(anovaFlavors)
+
+# extract p-value
+pValueFlavors <- anovaSummaryFlavors[[1]][["Pr(>F)"]][1]
+cat("The p-value from the ANOVA test comparing original flavors is:", pValueFlavors, "\n")
+
+if (pValueFlavors < 0.05) {
+  cat("There is a significant difference in mean sales among the original flavors in the post-launch period.\n")
+} else {
+  cat("There is no significant difference in mean sales among the original flavors in the post-launch period.\n")
+}
+
+```
+
+Based on the results, we observe that the **p-value (1.279767e-39) < 0.05**. Therefore, we **reject the null hypothesis** as there is a significant difference in mean sales among the original flavors in the post-launch period. It is also worth noting that Mango Zing may have cannibalized sales of other flavors based on the grouped dataset shown in the results below. 
+
+```{r post-launch-original-mangozing}
+
+dfFreshFizz %>%
+  pivot_longer(cols = c(Cola_Classic, Lemon_Light, Berry_Blast), names_to = "Flavor", values_to = "Sales") %>%
+  mutate(Period = ifelse(Date < as.Date("2024-06-01"), "Pre", "Post")) %>%
+  group_by(Flavor, Period) %>%
+  summarise(mean_sales = mean(Sales))
+
+```
+
+
+## Part D: Correlation Analysis Between Mango Zing and Total Sales 
+
+
+By using Pearson correlation coefficient, we get to assess the relationship between Mango Zing's daily sales and FreshFizz's total revenue. 
+
+```{r corr-coeff, echo=TRUE}
+
+corrCoeff <- cor(dfFreshFizz$Mango_Zing, dfFreshFizz$Total_Sales, use = "complete.obs")
+cat("The correlation coefficient between sales of Mango Zing and the total is:", corrCoeff, "\n")
+
+if (corrCoeff > 0.7) {
+  resultCorr <- "strong positive correlation"
+} else if (corrCoeff > 0.3) {
+  resultCorr <- "moderate positive correlation"
+} else if (corrCoeff  < -0.7) {
+  resultCorr <- "strong negative correlation"
+} else if (corrCoeff  < -0.3) {
+  resultCorr <- "moderate negative correlation"
+} else {
+  resultCorr <- "weak correlation"
+}
+
+cat("The correlation is a", resultCorr, ".\n")
+
+```
+
+From the output above, we note that the correlation coefficient between Mango Zing sales and total revenue is **0.5781**. This represents a **moderate positive correlation**, with 0.7 considered the threshold for a strong correlation. Although this falls into the moderate category, we can conclude that Mango Zing had a noticeable impact on overall sales, contributing positively to FreshFizz's revenue.  
+
+
+## Part E: Should Mango Zing be continued? 
+
+
+Based on the analyses conducted, Mango Zing demonstrates meaningful performance across several criteria: 
+
+### 1. Sales Significance 
+
+The correlation coefficient between Mango Zing sales and total revenue is **0.5871**, indicating a **moderative positive relationship**. This suggests that while Mango Zing contributes positively to daily revenue, its moderate relationship means that it is not the primary driver of FreshFizz, despite the post-launch figures for this flavor showing an average daily sale increase of **$14,654.25**.
+
+### 2. Impact on Other Flavors 
+
+The ANOVA test on original flavors produced a **highly significant p-value ((1.279767e-39))**, confirming that mean sales of Cola Classic, Lemon Light, and Berry Blast **declined** after Mango Zing's release, suggesting that the new flavor may have cannibalized the sales of other flavors. Nevertheless, the **total revenue still increased**, which implies Mango Zing's gains may have offset these losses to some extent. 
+
+### 3. Overall Revenue Trends 
+
+The pre-post comparison showed a statistically significant difference in total sales (p < 0,05), and the **line chart reveals an upward trend** in revenue. Despite the increase in variability (standard deviation rose by $13,095.90), FreshFizz's sales generally improved in the post-launch period. 
+
+### 4. Final Recommendation 
+
+Based on thorough analyses conducted for this case study, it is shown with confidence that **Mango Zing should be continued**. It has positively contributed to the overall revenue, and while it may have drawn sales from other flavors, the new flavor **does not harm the overall results**. However, FreshFizz should continue monitoring the sales of each flavor to avoid any downward trends that might undermine the balance of all products, aiming to contribute positively to FreshFizz to keep on marching. 
 
 
