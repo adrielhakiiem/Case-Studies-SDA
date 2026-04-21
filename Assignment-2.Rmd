@@ -1,6 +1,6 @@
 ---
-title: "Assignment 2: Statistical Data Analysis (CDS6224)"
-author: "Mohamad Adriel Hakiem  \nStudent ID: 243UC2462B\n"
+title: "Statistical Data Analysis"
+author: "Mohamad Adriel Hakiem"
 date: "2025-06-05"
 output:
   pdf_document: default
