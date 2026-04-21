@@ -191,7 +191,7 @@ This second case study explores the impact of the new drink flavor, Mango Zing o
 
 ```{r FreshFizz-data, echo=TRUE}
 
-setwd("/Users/ad/Desktop/Studies/MMU/Trimester 2/Statistical Data Analysis/Assignment 2")
+setwd("/directory to your dataset")
 dfFreshFizz <- read.csv("FreshFizz.csv")
 
 dfFreshFizz$Date <- as.Date(dfFreshFizz$Date)
