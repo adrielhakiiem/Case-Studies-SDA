@@ -26,7 +26,7 @@ This case study explores the influence of the new production line of the company
 library(dplyr)
 library(tidyr)
 
-setwd("/Users/ad/Desktop/Studies/MMU/Trimester 2/Statistical Data Analysis/Assignment 2")
+setwd("/directory to your dataset")
 batteryData <- read.csv("BatteryLifeNew.csv")
 
 ```
